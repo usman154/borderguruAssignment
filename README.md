@@ -42,6 +42,11 @@ You are now connected with mysql database.
 * [NodeJs](https://nodejs.org/en/) - Server used
 * [ExpressJs](https://expressjs.com/) - The web framework
 * [AngularJs](https://angularjs.org/) - Used on frontend as JS library
+* [Swagger](https://swagger.io/) - Used to document APIs
+
+## API Documentation
+
+Please find the API documentation at `http://localhost:3000/api-docs/#/`
 
 ## Authors
 
