@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-notification/0.3.6/angular-ui-notification.min.css"
+    />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-notification/0.3.6/angular-ui-notification.min.js"></script>
+
+
+</head>
+
+<body ng-app="app" ng-controller="appCtrl as vm">
+
+    <div class="container">
+        <h3>Record Orders</h3>
+        <ul class="nav nav-tabs">
+            <li ng-click="vm.currentActive = 1" ng-class="{active: vm.currentActive == 1}">
+                <a href="#">Order</a>
+            </li>
+            <li ng-click="vm.currentActive = 2" ng-class="{active: vm.currentActive == 2}">
+                <a href="#">Customer</a>
+            </li>
+
+        </ul>
+        <br>
+    </div>
+
+    <div class="container" id="main-container">
+        <div ng-show="vm.currentActive == 1">
+
+
+            <form>
+                <div class="row">
+                    <div class="form-group col-sm-4">
+                        <label for="name">Item Name</label>
+                        <input type="text" class="form-control" id="itemName" ng-model="vm.order.item">
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label for="price">Price</label>
+                        <input type="number" min="0" class="form-control" id="price" ng-model="vm.order.price">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-4">
+                        <label for="name">Currency</label>
+                        <select id="currency" class="form-control" ng-model="vm.order.currency">
+                            <option value="USD">USD</option>
+                            <option value="EUR">EUR</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label for="name">Customer</label>
+                        <select id="currency" class="form-control" required ng-model="vm.selectCustomer">
+                            <option ng-repeat="customer in vm.customers" value="{{customer}}">{{customer.customerName}} ({{customer.customerAddress}})</option>
+
+                        </select>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-success" ng-click="vm.createOrder()">Save Order</button>
+
+                <div style="margin:2%">
+
+                    <div class="row clearfix">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-3">
+                                        <h2 class="text-center pull-left" style="padding-left: 30px;">
+                                            <span class="glyphicon glyphicon-credit-card"> </span> Orders </h2>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class=" panel-body table-responsive">
+                                <div class="col-md-12 table-responsive panel-body">
+
+                                    <table class="table  table-bordered table-hover table-sortable" id="tab_logic">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    Order ID
+                                                </th>
+                                                <th>
+                                                    Customer Name
+                                                </th>
+                                                <th>
+                                                    Customer Address
+                                                </th>
+                                                <th>
+                                                    Item Name
+                                                </th>
+                                                <th>
+                                                    Price
+                                                </th>
+                                                <th>
+                                                    Currency
+                                                </th>
+                                                <th>
+                                                    Delete
+                                                </th>
+                                                <th>
+                                                    Update
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr id='addr0' data-id="0" ng-repeat="order in vm.orders ">
+                                                <td>
+                                                    {{order.id}}
+                                                </td>
+                                                <td>
+                                                    {{order.customerName ? order.customerName : 'Customer Removed' }}
+                                                </td>
+                                                <td>
+                                                    {{order.customerAddress ? order.customerAddress : 'Customer Removed'}}
+                                                </td>
+                                                <td>
+                                                    <input type="text" ng-model="order.item" placeholder='Item Name' class="form-control" />
+                                                </td>
+                                                <td>
+                                                    <input type="number" min="0" ng-model="order.price" placeholder='Item Price' class="form-control" />
+
+                                                </td>
+                                                <td>
+                                                    <input type="text" ng-model="order.currency" placeholder='Item Currency' class="form-control" />
+
+                                                </td>
+                                                <td data-name="del">
+                                                    <button nam "del0" type="button" ng-click="vm.deleteOrder(order.id)" class='btn btn-danger glyphicon glyphicon-trash row-remove'></button>
+                                                </td>
+                                                <td>
+                                                    <button type="button" ng-click="vm.updateOrder(order)" class="btn btn-info">Update</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <div ng-show="vm.currentActive == 2">
+            <form>
+                <div class="row">
+                    <div class="form-group col-sm-3" ng-repeat="field in vm.customerSchema">
+                        <label>{{vm.convertCamelCaseBackToText(field.Field)}}</label>
+                        <input type="text" ng-required="{{field.Key =='PRI'}} " ng-model="vm.newCustomer[field.Field]" class="form-control">
+                    </div>
+                </div>
+                <button type="button" ng-click="vm.addField()" class="btn btn-info">Add Customer Attribute</button>
+                <button type="button" class="btn btn-success" ng-click="vm.createCustomer()">Save Customer</button>
+                <div ng-if="!vm.addingNewField" style="margin:2%">
+
+                    <div class="row clearfix">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-3">
+                                        <h2 class="text-center pull-left" style="padding-left: 30px;">
+                                            <span class="glyphicon glyphicon-user"> </span> Customers </h2>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class=" panel-body table-responsive">
+                                <div class="col-md-12 table-responsive panel-body">
+
+                                    <table class="table  table-bordered table-hover table-sortable" id="tab_logic">
+                                        <thead>
+                                            <!-- <tr>
+                                                <th ng-repeat="field in vm.customerSchema | orderBy : 'Field' ">
+                                                    {{vm.convertCamelCaseBackToText(field.Field)}}
+                                                </th>
+                                                <th>
+                                                    Delete
+                                                </th>
+                                                <th>
+                                                    Update
+                                                </th>
+                                            </tr> -->
+                                        </thead>
+                                        <tbody>
+                                            <tr id='addr0' data-id="0" ng-repeat="customer in vm.customers ">
+                                                <td ng-repeat="(key, value) in customer">
+                                                    <input type="text" name='name0' ng-model="customer[key]" placeholder='{{vm.convertCamelCaseBackToText(key)}}' class="form-control"
+                                                    />
+
+                                                </td>
+
+                                                <td data-name="del">
+                                                    <button nam "del0" type="button" ng-click="vm.deleteCustomer(customer)" class='btn btn-danger glyphicon glyphicon-trash row-remove'></button>
+                                                </td>
+                                                <td>
+                                                    <button type="button" ng-click="vm.updateCustomer(customer)" class="btn btn-info">Update</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <a id="add_row" class="btn btn-default pull-right">Add Row</a> -->
+                    </div>
+                </div>
+
+            </form>
+
+            <div class="well" style="margin:2%" ng-if="vm.addingNewField">
+                <form id="ColumnForm" method="POST">
+                    <div class="form-group">
+                        <label for="username" class="control-label">Field Name</label>
+                        <input type="text" ng-model="vm.newColumn.name" class="form-control" required title="Please enter field name (camel case)">
+                        <span class="help-block"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="control-label">Field Type</label>
+                        <select class="form-control" ng-model="vm.newColumn.type">
+                            <option value="varchar(255)">String</option>
+                            <option value="INT">Number</option>
+                        </select>
+                    </div>
+
+                    <button type="click" ng-click="vm.saveField()" name="fieldSave" class="btn btn-success ">Save</button>
+                    <button type="button" ng-click="vm.cancelNewField()" class="btn btn-danger ">Cancel</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+<script src="js/controller.js"></script>
+
+</html>

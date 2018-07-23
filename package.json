@@ -1,0 +1,20 @@
+{
+  "name": "borderguru",
+  "version": "1.0.0",
+  "description": "This is the implementation of borderguru first round of interview",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "author": "Muhammad Usman",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^1.14.10"
+  },
+  "dependencies": {
+    "express": "^4.16.3",
+    "mysql": "^2.16.0",
+    "swagger-ui-express": "^3.0.10"
+  }
+}
